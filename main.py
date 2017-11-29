@@ -61,7 +61,7 @@ buf = h.read(65)
 #Write_USB_SerialNum_Settings    = 0x04
 #buf = [0x00,0xB1,Write_Deta_Setting_Byte]
 #buf = buf + [0 for i in range(65-len(buf))]
-# !!!! Don't care !!!!
+# !!!! Be careful when making changes !!!!
 #buf[6+1] =  0xD8    # VID (Lower)
 #buf[7+1] =  0x04    # VID (Higher)
 #buf[8+1] =  0xDD    # PID (Lower)
