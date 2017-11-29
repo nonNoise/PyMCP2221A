@@ -8,6 +8,8 @@ import hid
 VID = 0x04D8 
 PID = 0x00DD
 
+
+
 h = hid.device()
 h.open(VID,PID)
 
@@ -51,21 +53,26 @@ buf = h.read(65)
 #######################################################################
 # Write Flash Data
 #######################################################################
-Write_Deta_Setting_Byte = 0x00
+#Write_Deta_Setting_Byte = 0x00
 #Write_Chip_Settings             = 0x00
 #Write_GP_Settings               = 0x01
 #Write_USB_Manufacturer_Settings = 0x02
 #Write_USB_Product_Settings      = 0x03
 #Write_USB_SerialNum_Settings    = 0x04
+#buf = [0x00,0xB1,Write_Deta_Setting_Byte]
+#buf = buf + [0 for i in range(65-len(buf))]
+# !!!! Don't care !!!!
+#buf[6+1] =  0xD8    # VID (Lower)
+#buf[7+1] =  0x04    # VID (Higher)
+#buf[8+1] =  0xDD    # PID (Lower)
+#buf[9+1] =  0x00    # PID (Higher)
 
-buf = [0x00,0xB1,Write_Deta_Setting_Byte]
-buf = buf + [0 for i in range(65-len(buf))]
 #print ("Write")
 #print (buf)
-h.write(buf)
-buf = h.read(65)
-print ("Read")
-print (buf)
+#h.write(buf)
+#buf = h.read(65)
+#print ("Read")
+#print (buf)
 
 #######################################################################
 # reset
