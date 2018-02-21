@@ -11,6 +11,11 @@ This is a Microchip MCP2221(A) HID Library in python.
 
 - Setup
 
+
+.. image:: ./img/mcp2221.PNG
+
+
+
 - Example
 
 - API

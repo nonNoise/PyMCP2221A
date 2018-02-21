@@ -9,7 +9,6 @@ VID = 0x04D8
 PID = 0x00DD
 
 
-
 h = hid.device()
 h.open(VID,PID)
 
@@ -92,18 +91,18 @@ GPIO_0_BIT = 1      # 1:Hi 0:LOW
 GPIO_0_DIR = 0      # 0:OutPut 1:Input
 GPIO_0_MODE = 0x00  # GPIO MODE = 0x00 
 buf[8+1] = GPIO_0_BIT<<4 | GPIO_0_DIR<<3 | GPIO_0_MODE       #   GP0 settings
-GPIO_1_BIT = 1      # 1:Hi 0:LOW
+GPIO_1_BIT = 0      # 1:Hi 0:LOW
 GPIO_1_DIR = 0      # 0:OutPut 1:Input
 GPIO_1_MODE = 0x00  # GPIO MODE = 0x00 
-buf[9+1] = GPIO_1_BIT<<4 | GPIO_1_DIR<<3 | GPIO_1_MODE       #   GP0 settings
+buf[9+1] = GPIO_1_BIT<<4 | GPIO_1_DIR<<3 | GPIO_1_MODE       #   GP1 settings
 GPIO_2_BIT = 0      # 1:Hi 0:LOW
 GPIO_2_DIR = 0      # 0:OutPut 1:Input
 GPIO_2_MODE = 0x00  # GPIO MODE = 0x00 
-buf[10+1] = GPIO_2_BIT<<4 | GPIO_2_DIR<<3 | GPIO_2_MODE       #   GP0 settings
+buf[10+1] = GPIO_2_BIT<<4 | GPIO_2_DIR<<3 | GPIO_2_MODE       #   GP2 settings
 GPIO_3_BIT = 0      # 1:Hi 0:LOW
 GPIO_3_DIR = 0      # 0:OutPut 1:Input
 GPIO_3_MODE = 0x00  # GPIO MODE = 0x00 
-buf[11+1] = GPIO_3_BIT<<4 | GPIO_3_DIR<<3 | GPIO_3_MODE       #   GP0 settings
+buf[11+1] = GPIO_3_BIT<<4 | GPIO_3_DIR<<3 | GPIO_3_MODE       #   GP3 settings
 
 #print ("Write")
 #print (buf)
@@ -131,14 +130,6 @@ GPIO_3_INPUT =  buf[8]
 GPIO_3_DIR   =  buf[9]
 print ("Read")
 print (buf)
-print (GPIO_0_INPUT)
-print (GPIO_0_DIR)
-print (GPIO_1_INPUT)
-print (GPIO_1_DIR)
-print (GPIO_2_INPUT)
-print (GPIO_2_DIR)
-print (GPIO_3_INPUT)
-print (GPIO_3_DIR)
 
 
 #######################################################################
