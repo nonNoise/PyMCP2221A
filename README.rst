@@ -18,6 +18,18 @@ This is a Microchip MCP2221(A) HID Library in python.
 
 - Example
 
+    -   MCP2221_ADC
+
+    -   MCP2221_DAC
+    
+    -   MCP2221_GPIO    ▲
+    
+    -   MCP2221_Interrupt
+    
+    -   MCP2221_Clock    ●
+    
+    -   MCP2221_I2C
+
 - API
 
 - License

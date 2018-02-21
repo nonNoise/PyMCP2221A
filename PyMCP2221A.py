@@ -8,6 +8,19 @@ class PyMCP2221A :
     def __init__(self,VID = 0x04D8,PID = 0x00DD):
         self.mcp2221a = hid.device()
         self.mcp2221a.open(VID,PID)
+        self.CLKDUTY_0 = 0x00
+        self.CLKDUTY_25 = 0x08
+        self.CLKDUTY_50 = 0x10
+        self.CLKDUTY_75 = 0x18
+
+        self.CLKDIV_1 = 0x00    # 48MHz
+        self.CLKDIV_2 = 0x01    # 24MHz
+        self.CLKDIV_4 = 0x02    # 12MHz
+        self.CLKDIV_8 = 0x03    # 6MHz
+        self.CLKDIV_16 = 0x04   # 3MHz
+        self.CLKDIV_32 = 0x05   # 1.5MHz
+        self.CLKDIV_64 = 0x06   # 750KHz
+        self.CLKDIV_128 = 0x07  # 375KHz
 
 
 #######################################################################
@@ -77,8 +90,8 @@ class PyMCP2221A :
     def GPIO_Init(self):
         buf = [0x00,0x61]
         buf = buf + [0 for i in range(65-len(buf))]
-        self.mcp2221a.write(buf)
-        rbuf = self.mcp2221a.read(65)
+        #self.mcp2221a.write(buf)
+        #rbuf = self.mcp2221a.read(65)
 
         buf = [0x00,0x60]
         buf = buf + [0 for i in range(65-len(buf))]
@@ -103,12 +116,14 @@ class PyMCP2221A :
         self.GPIO_3_DIR = 0#(rbuf[25]>>3)&0x01      # 0:OutPut 1:Input
         self.GPIO_3_MODE = 0#rbuf[25]&0x07  # GPIO MODE = 0x00 
         
+        #for(i in range(64)):
+        #    buf[i] = rbuf[i] | buf[i]
         self.mcp2221a.write(buf)
         buf = self.mcp2221a.read(65)
 
 
 #######################################################################
-# GPIO Write
+# GPIO Write command
 #######################################################################
     def GPIO_Write(self):
         buf = [0x00,0x60]
@@ -126,11 +141,13 @@ class PyMCP2221A :
         buf[10+1] = self.GPIO_2_BIT<<4 | self.GPIO_2_DIR<<3 | self.GPIO_2_MODE       #   GP0 settings
         buf[11+1] = self.GPIO_3_BIT<<4 | self.GPIO_3_DIR<<3 | self.GPIO_3_MODE       #   GP0 settings
         #print (buf)
+        #for(i in range(64)):
+        #    buf[i] = rbuf[i] | buf[i]
         self.mcp2221a.write(buf)
         rbuf = self.mcp2221a.read(65)
 
 #######################################################################
-# Read GPIO Data
+# Read GPIO Data command
 #######################################################################
     def GPIO_Read(self):
         buf = [0x00,0x51]
@@ -147,7 +164,7 @@ class PyMCP2221A :
         self.GPIO_3_DIR   =  buf[9]
 
 #######################################################################
-# GPIO Data
+# GPIO Outpu/Input Data
 #######################################################################
     def GPIO_0_Output(self,bit):
         self.GPIO_0_BIT = bit # 1:Hi 0:LOW
@@ -208,6 +225,35 @@ class PyMCP2221A :
     def GPIO_3_Input(self):
         self.GPIO_Read()
         return self.GPIO_3_INPUT, self.GPIO_3_DIR
+
+
+
+
+#######################################################################
+# Clock Out Value & Duty
+#######################################################################
+    def ClockOut(self,duty,value):
+        buf = [0x00,0x61]
+        buf = buf + [0 for i in range(65-len(buf))]
+        self.mcp2221a.write(buf)
+        rbuf = self.mcp2221a.read(65)
+        
+        buf = [0x00,0x60]
+        buf = buf + [0 for i in range(65-len(buf))]
+        buf[2+1] = 0x80 | duty | (0x07&value)    #   Clock Output Divider value
+        buf[3+1] = rbuf[3+1]     #   DAC Voltage Reference
+        buf[4+1] = rbuf[4+1]     #   Set DAC output value
+        buf[5+1] = rbuf[5+1]     #   ADC Voltage Reference
+        buf[6+1] = rbuf[6+1]     #   Setup the interrupt detection mechanism and clear the detection flag
+        buf[7+1] = 0x80     #   Alter GPIO configuration: alters the current GP designation
+                            #   datasheet says this should be 1, but should actually be 0x80
+        buf[8+1] = rbuf[8+1]     #   GP0 settings
+        buf[9+1] = 0x01     #   GP1 settings
+        buf[10+1] = rbuf[10+1]    #   GP2 settings
+        buf[11+1] = rbuf[11+1]    #   GP3 settings
+        self.mcp2221a.write(buf)
+        buf = self.mcp2221a.read(65)
+        
 
 #######################################################################
 # I2C Init
