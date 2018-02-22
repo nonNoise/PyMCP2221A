@@ -13,7 +13,7 @@ class PyMCP2221A :
         self.CLKDUTY_50 = 0x10
         self.CLKDUTY_75 = 0x18
 
-        self.CLKDIV_1 = 0x00    # 48MHz
+        #self.CLKDIV_1 = 0x00    # 48MHz  Dont work.
         self.CLKDIV_2 = 0x01    # 24MHz
         self.CLKDIV_4 = 0x02    # 12MHz
         self.CLKDIV_8 = 0x03    # 6MHz
@@ -241,19 +241,104 @@ class PyMCP2221A :
         buf = [0x00,0x60]
         buf = buf + [0 for i in range(65-len(buf))]
         buf[2+1] = 0x80 | duty | (0x07&value)    #   Clock Output Divider value
-        buf[3+1] = rbuf[3+1]     #   DAC Voltage Reference
-        buf[4+1] = rbuf[4+1]     #   Set DAC output value
-        buf[5+1] = rbuf[5+1]     #   ADC Voltage Reference
-        buf[6+1] = rbuf[6+1]     #   Setup the interrupt detection mechanism and clear the detection flag
+        buf[3+1] = rbuf[6]     #   DAC Voltage Reference
+        buf[4+1] = 0x00     #   Set DAC output value
+        buf[5+1] = rbuf[7]     #   ADC Voltage Reference
+        buf[6+1] = 0x00     #   Setup the interrupt detection mechanism and clear the detection flag
         buf[7+1] = 0x80     #   Alter GPIO configuration: alters the current GP designation
                             #   datasheet says this should be 1, but should actually be 0x80
-        buf[8+1] = rbuf[8+1]     #   GP0 settings
+        buf[8+1] = rbuf[22]     #   GP0 settings
         buf[9+1] = 0x01     #   GP1 settings
-        buf[10+1] = rbuf[10+1]    #   GP2 settings
-        buf[11+1] = rbuf[11+1]    #   GP3 settings
+        buf[10+1] = rbuf[24]    #   GP2 settings
+        buf[11+1] = rbuf[25]    #   GP3 settings
         self.mcp2221a.write(buf)
         buf = self.mcp2221a.read(65)
         
+#######################################################################
+# ADC 1
+#######################################################################
+    def ADC_1_Init(self):
+        buf = [0x00,0x61]
+        buf = buf + [0 for i in range(65-len(buf))]
+        self.mcp2221a.write(buf)
+        rbuf = self.mcp2221a.read(65)
+        
+        buf = [0x00,0x60]
+        buf = buf + [0 for i in range(65-len(buf))]
+        buf[2+1] = rbuf[5]      #   Clock Output Divider value
+        buf[3+1] = rbuf[6]      #   DAC Voltage Reference
+        buf[4+1] = 0x00      #   Set DAC output value
+        buf[5+1] = 0x00      #   ADC Voltage Reference
+        buf[6+1] = 0x00      #   Setup the interrupt detection mechanism and clear the detection flag
+        buf[7+1] = 0xFF         #   Alter GPIO configuration: alters the current GP designation
+                                #   datasheet says this should be 1, but should actually be 0x80
+        buf[8+1] =  rbuf[22]     #   GP0 settings
+        buf[9+1] =  0x02        #   GP1 settings
+        buf[10+1] = rbuf[24]    #   GP2 settings
+        buf[11+1] = rbuf[25]    #   GP3 settings
+        self.mcp2221a.write(buf)
+        buf = self.mcp2221a.read(65)
+#######################################################################
+# ADC 2
+#######################################################################
+    def ADC_2_Init(self):
+        buf = [0x00,0x61]
+        buf = buf + [0 for i in range(65-len(buf))]
+        self.mcp2221a.write(buf)
+        rbuf = self.mcp2221a.read(65)
+        
+        buf = [0x00,0x60]
+        buf = buf + [0 for i in range(65-len(buf))]
+        buf[2+1] = rbuf[5]      #   Clock Output Divider value
+        buf[3+1] = rbuf[6]      #   DAC Voltage Reference
+        buf[4+1] = 0x00      #   Set DAC output value
+        buf[5+1] = rbuf[7]      #   ADC Voltage Reference
+        buf[6+1] = 0x00      #   Setup the interrupt detection mechanism and clear the detection flag
+        buf[7+1] = 0x80         #   Alter GPIO configuration: alters the current GP designation
+                                #   datasheet says this should be 1, but should actually be 0x80
+        buf[8+1] =  rbuf[22]     #   GP0 settings
+        buf[9+1] =  rbuf[23]     #   GP1 settings
+        buf[10+1] = 0x02        #   GP2 settings
+        buf[11+1] = rbuf[25]    #   GP3 settings
+        self.mcp2221a.write(buf)
+        buf = self.mcp2221a.read(65)
+#######################################################################
+# ADC 3
+#######################################################################
+    def ADC_3_Init(self):
+        buf = [0x00,0x61]
+        buf = buf + [0 for i in range(65-len(buf))]
+        self.mcp2221a.write(buf)
+        rbuf = self.mcp2221a.read(65)
+        
+        buf = [0x00,0x60]
+        buf = buf + [0 for i in range(65-len(buf))]
+        buf[2+1] = rbuf[5]      #   Clock Output Divider value
+        buf[3+1] = rbuf[6]      #   DAC Voltage Reference
+        buf[4+1] = 0x00      #   Set DAC output value
+        buf[5+1] = rbuf[7]      #   ADC Voltage Reference
+        buf[6+1] = 0x00      #   Setup the interrupt detection mechanism and clear the detection flag
+        buf[7+1] = 0x80         #   Alter GPIO configuration: alters the current GP designation
+                                #   datasheet says this should be 1, but should actually be 0x80
+        buf[8+1] =  rbuf[22]     #   GP0 settings
+        buf[9+1] =  rbuf[23]     #   GP1 settings
+        buf[10+1] = rbuf[24]    #   GP2 settings
+        buf[11+1] = 0x02        #   GP3 settings
+        self.mcp2221a.write(buf)
+        buf = self.mcp2221a.read(65)
+#######################################################################
+# ADC Deta Get
+#######################################################################
+    def ADC_DataRead(self):
+        buf = [0x00,0x10]
+        buf = buf + [0 for i in range(65-len(buf))]
+        self.mcp2221a.write(buf)
+        buf = self.mcp2221a.read(65)
+        #for i in range(len(buf)):
+        #    print ('[%d]: 0x{:02x}'.format(buf[i]) % (i))
+        self.ADC_1_data = buf[50] | (buf[51]<<8)        #   ADC Data (16-bit) values
+        self.ADC_2_data = buf[52] | (buf[53]<<8)        #   ADC Data (16-bit) values
+        self.ADC_3_data = buf[54] | (buf[55]<<8)        #   ADC Data (16-bit) values        
 
 #######################################################################
 # I2C Init
