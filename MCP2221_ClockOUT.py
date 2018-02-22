@@ -5,6 +5,10 @@ mcp2221 = PyMCP2221A.PyMCP2221A()
 #time.sleep(1)
 
 mcp2221 = PyMCP2221A.PyMCP2221A()
+print('-'*20)
+print('MCP2221(A) ClockOut Test')
+print('-'*20)
+
 #========================================#
 #   CLKDUTY_0   # duty 0%
 #   CLKDUTY_25  # duty 25%
