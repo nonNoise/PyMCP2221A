@@ -19,17 +19,17 @@ MCP2221 & MCP2221A work in Python.
 
 - Example
 
-    -   MCP2221_ADC
+    -   MCP2221_ADC     ●
 
-    -   MCP2221_DAC
+    -   MCP2221_DAC     ●
     
-    -   MCP2221_GPIO    ▲
+    -   MCP2221_GPIO    ●
     
-    -   MCP2221_Interrupt
+    -   MCP2221_Interrupt   ×
     
     -   MCP2221_Clock    ●
     
-    -   MCP2221_I2C
+    -   MCP2221_I2C     ▲
 
 - API
 
