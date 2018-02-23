@@ -1,4 +1,3 @@
-MCP2221 & MCP2221A work in Python. 
 =====================================================
 PyMCP2221A
 =====================================================
@@ -6,6 +5,8 @@ PyMCP2221A
 - What is.
 
 This is a Microchip MCP2221(A) HID Library in python.
+
+MCP2221 & MCP2221A work in Python. 
 
 - Install
 
