@@ -11,6 +11,12 @@ print('-'*20)
 print(" CTRL+C keys to exit.")
 
 mcp2221.I2C_Init()
+#mcp2221.I2C_Read(0x00)
+
+data =[0]
+
+mcp2221.I2C_Write(0x00,data)
+
 #while 1:
 #    mcp2221.I2C_Write(0x01,0x01)
 #    time.sleep(1)

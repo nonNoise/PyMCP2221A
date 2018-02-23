@@ -417,25 +417,25 @@ class PyMCP2221A :
 #######################################################################
 # I2C Init
 #######################################################################
-    def I2C_Init(self,speed=26):
-        buf = [0x00,0x10]
-        buf = buf + [0 for i in range(65-len(buf))]
-        buf[2+1] = 0x10 #Cancel current I2C/SMBus transfer (sub-command)
-        #buf[3+1] = 0x20 #Set I2C/SMBus communication speed (sub-command)
-        #buf[4+1] = 0x01 #The I2C/SMBus system clock divider that will be used to establish the communication speed
-        self.mcp2221a.write(buf)
-        rbuf = self.mcp2221a.read(65)
-        #for i in range(len(rbuf)):
-        #    print ('[%d]: 0x{:02x}'.format(rbuf[i]) % (i))
+    def I2C_Init(self,speed=100000):
         buf = [0x00,0x10]
         buf = buf + [0 for i in range(65-len(buf))]
         buf[2+1] = 0x00 #Cancel current I2C/SMBus transfer (sub-command)
         buf[3+1] = 0x20 #Set I2C/SMBus communication speed (sub-command)
-        buf[4+1] = 0x00 #The I2C/SMBus system clock divider that will be used to establish the communication speed
+        buf[4+1] = int((12000000/speed) - 3) #The I2C/SMBus system clock divider that will be used to establish the communication speed
         self.mcp2221a.write(buf)
         rbuf = self.mcp2221a.read(65)
-        for i in range(len(rbuf)):
-            print ('[%d]: 0x{:02x}'.format(rbuf[i]) % (i))
+        #for i in range(len(rbuf)):
+        #    print ('[%d]: 0x{:02x}'.format(rbuf[i]) % (i))
+        #buf = [0x00,0x10]
+        #buf = buf + [0 for i in range(65-len(buf))]
+        #buf[2+1] = 0x00 #Cancel current I2C/SMBus transfer (sub-command)
+        #buf[3+1] = 0x20 #Set I2C/SMBus communication speed (sub-command)
+        #buf[4+1] = 0x00 #The I2C/SMBus system clock divider that will be used to establish the communication speed
+        #self.mcp2221a.write(buf)
+        #rbuf = self.mcp2221a.read(65)
+        #for i in range(len(rbuf)):
+        #    print ('[%d]: 0x{:02x}'.format(rbuf[i]) % (i))
         
 #######################################################################
 # I2C State Check
@@ -457,11 +457,12 @@ class PyMCP2221A :
 #######################################################################
 # I2C Write
 #######################################################################
-    def I2C_Write(self,addrs,byte):
+    def I2C_Write(self,addrs,data):
+        print(len(data))
         buf = [0x00,0x90]
         buf = buf + [0 for i in range(65-len(buf))]
-        buf[1+1] = 0xFF#(byte&0x00FF) #Cancel current I2C/SMBus transfer (sub-command)
-        buf[2+1] = 0xFF#(byte&0xFF00)>>8 #Set I2C/SMBus communication speed (sub-command)
+        buf[1+1] = (len(data)&0x00FF) #Cancel current I2C/SMBus transfer (sub-command)
+        buf[2+1] = (len(data)&0xFF00)>>8 #Set I2C/SMBus communication speed (sub-command)
         buf[3+1] = addrs #The I2C/SMBus system clock divider that will be used to establish the communication speed
         buf[4+1] = 0xAA #The I2C/SMBus system clock divider that will be used to establish the communication speed
         buf[5+1] = 0x55 #The I2C/SMBus system clock divider that will be used to establish the communication speed
@@ -470,21 +471,31 @@ class PyMCP2221A :
         self.mcp2221a.write(buf)
         rbuf =self.mcp2221a.read(65)
         for i in range(len(rbuf)):
-            print ('[%d]: 0x{:02x}'.format(rbuf[i]) % (i))
+            print ('{:d}: 0x{:02x}'.format(i,rbuf[i]))
 
 #######################################################################
 # I2C Read
+# TODO: Read Deta Check.
 #######################################################################
-    def I2C_Read(self,addrs,byte):
+    def I2C_Read(self,addrs):
         buf = [0x00,0x91]
         buf = buf + [0 for i in range(65-len(buf))]
-        buf[2+1] = (byte&0x00FF) #Cancel current I2C/SMBus transfer (sub-command)
-        buf[3+1] = (byte&0xFF00)>>8 #Set I2C/SMBus communication speed (sub-command)
-        buf[4+1] = addrs #The I2C/SMBus system clock divider that will be used to establish the communication speed
+        buf[1+1] = (0x00001&0x00FF) # Read LEN
+        buf[2+1] = (0x00001&0xFF00)>>8 # Read LEN
+        buf[3+1] = addrs # addrs
         self.mcp2221a.write(buf)
         rbuf = self.mcp2221a.read(65)
-        print (hex(rbuf[0]))
-        print (rbuf)
+
+        buf = [0x00,0x40]
+        buf = buf + [0 for i in range(65-len(buf))]
+        buf[1+1] = 0x00
+        buf[2+1] = 0x00
+        buf[3+1] = 0x00
+        self.mcp2221a.write(buf)
+        rbuf = self.mcp2221a.read(65)
+
+        #for i in range(len(rbuf)):
+        #    print ('[{:d}]: 0x{:02x}'.format(i,rbuf[i]))
 
     def I2C_Read_RepetedStart(self,addrs,byte):
         buf = [0x00,0x93]
