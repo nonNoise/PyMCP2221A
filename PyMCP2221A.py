@@ -16,7 +16,6 @@ class PyMCP2221A :
         self.CLKDUTY_25 = 0x08
         self.CLKDUTY_50 = 0x10
         self.CLKDUTY_75 = 0x18
-
         #self.CLKDIV_1 = 0x00    # 48MHz  Dont work.
         self.CLKDIV_2 = 0x01    # 24MHz
         self.CLKDIV_4 = 0x02    # 12MHz
@@ -94,31 +93,31 @@ class PyMCP2221A :
     def GPIO_Init(self):
         buf = [0x00,0x61]
         buf = buf + [0 for i in range(65-len(buf))]
-        #self.mcp2221a.write(buf)
-        #rbuf = self.mcp2221a.read(65)
+        self.mcp2221a.write(buf)
+        rbuf = self.mcp2221a.read(65)
 
         buf = [0x00,0x60]
         buf = buf + [0 for i in range(65-len(buf))]
-        #buf[2+1] = 0x00     #   Clock Output Divider value
-        #buf[3+1] = 0x00     #   DAC Voltage Reference
-        #buf[4+1] = 0x00     #   Set DAC output value
-        #buf[5+1] = 0x00     #   ADC Voltage Reference
+        buf[2+1] = rbuf[5]     #   Clock Output Divider value
+        buf[3+1] = rbuf[6]     #   DAC Voltage Reference
+        buf[4+1] = 0x00     #   Set DAC output value
+        buf[5+1] = 0x00     #   ADC Voltage Reference
         #buf[6+1] = 0x00     #   Setup the interrupt detection mechanism and clear the detection flag
         buf[7+1] = 0x80     #   Alter GPIO configuration: alters the current GP designation
                             #   datasheet says this should be 1, but should actually be 0x80
 
-        self.GPIO_0_BIT = 0#(rbuf[22]>>4)&0x01      # 1:Hi 0:LOW
-        self.GPIO_0_DIR = 0#(rbuf[22]>>3)&0x01      # 0:OutPut 1:Input
-        self.GPIO_0_MODE =0# rbuf[22]&0x07  # GPIO MODE = 0x00 
-        self.GPIO_1_BIT = 0#(rbuf[23]>>4)&0x01      # 1:Hi 0:LOW
-        self.GPIO_1_DIR = 0#(rbuf[23]>>3)&0x01      # 0:OutPut 1:Input
-        self.GPIO_1_MODE =0# rbuf[23]&0x07  # GPIO MODE = 0x00 
-        self.GPIO_2_BIT = 0#(rbuf[24]>>4)&0x01      # 1:Hi 0:LOW
-        self.GPIO_2_DIR = 0#(rbuf[24]>>3)&0x01      # 0:OutPut 1:Input
-        self.GPIO_2_MODE = 0#rbuf[24]&0x07  # GPIO MODE = 0x00 
-        self.GPIO_3_BIT = 0#(rbuf[25]>>4)&0x01      # 1:Hi 0:LOW
-        self.GPIO_3_DIR = 0#(rbuf[25]>>3)&0x01      # 0:OutPut 1:Input
-        self.GPIO_3_MODE = 0#rbuf[25]&0x07  # GPIO MODE = 0x00 
+        self.GPIO_0_BIT = (rbuf[22+1]>>4)&0x01      # 1:Hi 0:LOW
+        self.GPIO_0_DIR = (rbuf[22+1]>>3)&0x01      # 0:OutPut 1:Input
+        self.GPIO_0_MODE = rbuf[22+1]&0x07  # GPIO MODE = 0x00 
+        self.GPIO_1_BIT = (rbuf[23+1]>>4)&0x01      # 1:Hi 0:LOW
+        self.GPIO_1_DIR = (rbuf[23+1]>>3)&0x01      # 0:OutPut 1:Input
+        self.GPIO_1_MODE = rbuf[23+1]&0x07  # GPIO MODE = 0x00 
+        self.GPIO_2_BIT = (rbuf[24+1]>>4)&0x01      # 1:Hi 0:LOW
+        self.GPIO_2_DIR = (rbuf[24+1]>>3)&0x01      # 0:OutPut 1:Input
+        self.GPIO_2_MODE = rbuf[24+1]&0x07  # GPIO MODE = 0x00 
+        self.GPIO_3_BIT = (rbuf[25+1]>>4)&0x01      # 1:Hi 0:LOW
+        self.GPIO_3_DIR = (rbuf[25+1]>>3)&0x01      # 0:OutPut 1:Input
+        self.GPIO_3_MODE = rbuf[25+1]&0x07  # GPIO MODE = 0x00 
         
         #for(i in range(64)):
         #    buf[i] = rbuf[i] | buf[i]
@@ -130,10 +129,15 @@ class PyMCP2221A :
 # GPIO Write command
 #######################################################################
     def GPIO_Write(self):
+        buf = [0x00,0x61]
+        buf = buf + [0 for i in range(65-len(buf))]
+        self.mcp2221a.write(buf)
+        rbuf = self.mcp2221a.read(65)
+
         buf = [0x00,0x60]
         buf = buf + [0 for i in range(65-len(buf))]
-        #buf[2+1] = 0x00     #   Clock Output Divider value
-        #buf[3+1] = 0x00     #   DAC Voltage Reference
+        buf[2+1] = rbuf[5]     #   Clock Output Divider value
+        buf[3+1] = rbuf[6]     #   DAC Voltage Reference
         #buf[4+1] = 0x00     #   Set DAC output value
         #buf[5+1] = 0x00     #   ADC Voltage Reference
         #buf[6+1] = 0x00     #   Setup the interrupt detection mechanism and clear the detection flag
@@ -471,7 +475,6 @@ class PyMCP2221A :
         
 #######################################################################
 # I2C Read
-# TODO: Read Deta Check.
 #######################################################################
     def I2C_Read(self,addrs,size):
         buf = [0x00,0x91]
@@ -482,10 +485,10 @@ class PyMCP2221A :
         self.mcp2221a.write(buf)
         rbuf = self.mcp2221a.read(65)
         if(rbuf[1]!=0x00):
-            print("!! 0x91 I2C command not completed !! [0x{:02x},0x{:02x}]".format(addrs,rbuf[1]))
+            #print("!! 0x91 I2C command not completed !! [0x{:02x},0x{:02x}]".format(addrs,rbuf[1]))
             self.I2C_Cancel()
             return -1
-        
+        time.sleep(0.1)
         buf = [0x00,0x40]
         buf = buf + [0 for i in range(65-len(buf))]
         buf[1+1] = 0x00
@@ -494,7 +497,7 @@ class PyMCP2221A :
         self.mcp2221a.write(buf)
         rbuf = self.mcp2221a.read(65)
         if(rbuf[1]!=0x00):
-            print("!! 0x40 I2C command not completed !! [0x{:02x},0x{:02x}]".format(addrs,rbuf[1]))
+            #print("!! 0x40 I2C command not completed !! [0x{:02x},0x{:02x}]".format(addrs,rbuf[1]))
             self.I2C_Cancel()
             return -1
         if(rbuf[2]==0x00 and rbuf[3]==0x00 ):

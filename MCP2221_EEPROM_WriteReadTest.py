@@ -10,7 +10,7 @@ print(" CTRL+C keys to exit.")
 
 mcp2221.I2C_Init()
 
-MAX = 0x0FFF
+MAX = 0x00FF
 
 for i in range(MAX):
     data=[0]*3

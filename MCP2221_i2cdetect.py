@@ -21,7 +21,7 @@ for i in range(0x00,0x7f) :
         print('  {:02x}'.format(i), end='')
     else:
         print('  --', end='')
-
+        
 print("")
 
 
