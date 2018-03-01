@@ -433,7 +433,17 @@ class PyMCP2221A :
         buf[3+1] = 0x20 #Set I2C/SMBus communication speed (sub-command)
         buf[4+1] = int((12000000/speed) - 3) #The I2C/SMBus system clock divider that will be used to establish the communication speed
         self.mcp2221a.write(buf)
-        self.mcp2221a.read(65)
+        rbuf = self.mcp2221a.read(65)
+        print("Init")
+        if(rbuf[22]==0):
+            print("SCL is low.")
+            exit()
+            return -1
+        if(rbuf[23]==0):
+            print("SDA is low.")
+            exit()
+            return -1
+        
         #time.sleep(0.001)
         
 #######################################################################
@@ -472,7 +482,7 @@ class PyMCP2221A :
         rbuf = self.mcp2221a.read(65)
         for i in range(5): #len(rbuf)
             print ('{:d}: 0x{:02x}'.format(i,rbuf[i]))
-        time.sleep(0.01)
+        #time.sleep(0.01)
         
 #######################################################################
 # I2C Read
