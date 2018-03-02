@@ -470,7 +470,6 @@ class PyMCP2221A :
 # I2C Write
 #######################################################################
     def I2C_Write(self,addrs,data):
-        print(len(data))
         buf = [0x00,0x90]
         buf = buf + [0 for i in range(65-len(buf))]
         buf[1+1] = (len(data)&0x00FF) #Cancel current I2C/SMBus transfer (sub-command)
@@ -480,9 +479,9 @@ class PyMCP2221A :
             buf[4+1+i] = data[i] #The I2C/SMBus system clock divider that will be used to establish the communication speed
         self.mcp2221a.write(buf)
         rbuf = self.mcp2221a.read(65)
-        for i in range(5): #len(rbuf)
-            print ('{:d}: 0x{:02x}'.format(i,rbuf[i]))
-        #time.sleep(0.01)
+        #for i in range(5): #len(rbuf)
+        #    print ('{:d}: 0x{:02x}'.format(i,rbuf[i]))
+        time.sleep(0.002)
         
 #######################################################################
 # I2C Read
