@@ -1,8 +1,8 @@
-import PyMCP2221A
+from PyMCP2221A import PyMCP2221A
 import time
-gpio = PyMCP2221A.PyMCP2221A()
+mcp2221 = PyMCP2221A.PyMCP2221A()
 
-gpio.Reset()
+mcp2221.Reset()
 time.sleep(1)
 mcp2221 = PyMCP2221A.PyMCP2221A()
 print('-'*20)

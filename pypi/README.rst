@@ -20,14 +20,11 @@ PyMCP2221A Install
 
     - pip install PyMCP2221A
 
-: :
+    - https://github.com/nonNoise/PyMCP2221A
 
     import PyMCP2221A
     mcp2221 = PyMCP2221A.PyMCP2221A()
 
-- Setup
-
-.. image:: ./img/mcp2221.PNG
 
 - Example
 

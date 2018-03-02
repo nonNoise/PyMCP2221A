@@ -1,4 +1,5 @@
-import PyMCP2221A
+from PyMCP2221A import PyMCP2221A
+
 import time
 mcp2221 = PyMCP2221A.PyMCP2221A()
 #mcp2221.Reset()

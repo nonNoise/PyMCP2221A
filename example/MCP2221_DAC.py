@@ -1,4 +1,5 @@
-import PyMCP2221A
+from PyMCP2221A import PyMCP2221A
+
 import time
 gpio = PyMCP2221A.PyMCP2221A()
 

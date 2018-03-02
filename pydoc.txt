@@ -1,0 +1,106 @@
+Help on module PyMCP2221A:
+
+NAME
+    PyMCP2221A
+
+DESCRIPTION
+    #############################################################
+    #    MIT License                                            #
+    #    Copyright (c) 2017 Yuta KItagami                       #
+    #############################################################
+
+CLASSES
+    builtins.object
+        PyMCP2221A
+    
+    class PyMCP2221A(builtins.object)
+     |  Methods defined here:
+     |  
+     |  ADC_1_Init(self)
+     |  
+     |  ADC_2_Init(self)
+     |  
+     |  ADC_3_Init(self)
+     |  
+     |  ADC_DataRead(self)
+     |  
+     |  ClockOut(self, duty, value)
+     |  
+     |  Command_Structure(self, I2C_Cancel_Bit, I2C_Speed_SetUp_Bit, I2C_Speed_SetVal_Byte)
+     |  
+     |  DAC_1_Init(self)
+     |  
+     |  DAC_2_Init(self)
+     |  
+     |  DAC_Datawrite(self, value)
+     |  
+     |  GPIO_0_Input(self)
+     |  
+     |  GPIO_0_InputMode(self)
+     |  
+     |  GPIO_0_Output(self, bit)
+     |  
+     |  GPIO_0_OutputMode(self)
+     |  
+     |  GPIO_1_Input(self)
+     |  
+     |  GPIO_1_InputMode(self)
+     |  
+     |  GPIO_1_Output(self, bit)
+     |  
+     |  GPIO_1_OutputMode(self)
+     |  
+     |  GPIO_2_Input(self)
+     |  
+     |  GPIO_2_InputMode(self)
+     |  
+     |  GPIO_2_Output(self, bit)
+     |  
+     |  GPIO_2_OutputMode(self)
+     |  
+     |  GPIO_3_Input(self)
+     |  
+     |  GPIO_3_InputMode(self)
+     |  
+     |  GPIO_3_Output(self, bit)
+     |  
+     |  GPIO_3_OutputMode(self)
+     |  
+     |  GPIO_Init(self)
+     |  
+     |  GPIO_Read(self)
+     |  
+     |  GPIO_Write(self)
+     |  
+     |  I2C_Cancel(self)
+     |  
+     |  I2C_Init(self, speed=100000)
+     |  
+     |  I2C_Read(self, addrs, size)
+     |  
+     |  I2C_State_Check(self)
+     |  
+     |  I2C_Write(self, addrs, data)
+     |  
+     |  Read_Flash_Data(self, Read_Deta_Setting_Byte)
+     |  
+     |  Reset(self)
+     |  
+     |  Write_Flash_Data(self, data)
+     |  
+     |  __init__(self, VID=1240, PID=221)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+
+FILE
+    c:\kitagami\github\pymcp2221a\pymcp2221a.py
+
+
