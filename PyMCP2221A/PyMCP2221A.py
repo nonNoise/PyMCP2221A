@@ -49,46 +49,46 @@ class PyMCP2221A:
 
     def Read_Flash_Data(self, Read_Deta_Setting_Byte):
         Read_Deta_Setting_Byte = 0x00
-        #Read_Chip_Settings             = 0x00
-        #Read_GP_Settings               = 0x01
-        #Read_USB_Manufacturer_Settings = 0x02
-        #Read_USB_Product_Settings      = 0x03
-        #Read_USB_SerialNum_Settings    = 0x04
-        #Read_Chip_Factory_Settings     = 0x05
+        # Read_Chip_Settings             = 0x00
+        # Read_GP_Settings               = 0x01
+        # Read_USB_Manufacturer_Settings = 0x02
+        # Read_USB_Product_Settings      = 0x03
+        # Read_USB_SerialNum_Settings    = 0x04
+        # Read_Chip_Factory_Settings     = 0x05
         buf = [0x00, 0xB0, Read_Deta_Setting_Byte]
         buf = buf + [0 for i in range(65 - len(buf))]
-        #print ("Write")
-        #print (buf)
+        # print ("Write")
+        # print (buf)
         self.mcp2221a.write(buf)
         buf = self.mcp2221a.read(65)
-        #print ("Read")
-        #print (buf)
+        # print ("Read")
+        # print (buf)
 #######################################################################
 # Write Flash Data
 #######################################################################
 
     def Write_Flash_Data(self, data):
         pass
-        #Write_Deta_Setting_Byte = 0x00
-        #Write_Chip_Settings             = 0x00
-        #Write_GP_Settings               = 0x01
-        #Write_USB_Manufacturer_Settings = 0x02
-        #Write_USB_Product_Settings      = 0x03
-        #Write_USB_SerialNum_Settings    = 0x04
-        #buf = [0x00,0xB1,Write_Deta_Setting_Byte]
-        #buf = buf + [0 for i in range(65-len(buf))]
+        # Write_Deta_Setting_Byte = 0x00
+        # Write_Chip_Settings             = 0x00
+        # Write_GP_Settings               = 0x01
+        # Write_USB_Manufacturer_Settings = 0x02
+        # Write_USB_Product_Settings      = 0x03
+        # Write_USB_SerialNum_Settings    = 0x04
+        # buf = [0x00,0xB1,Write_Deta_Setting_Byte]
+        # buf = buf + [0 for i in range(65-len(buf))]
         # !!!! Be careful when making changes !!!!
         # buf[6+1] =  0xD8    # VID (Lower)
         # buf[7+1] =  0x04    # VID (Higher)
         # buf[8+1] =  0xDD    # PID (Lower)
         # buf[9+1] =  0x00    # PID (Higher)
 
-        #print ("Write")
-        #print (buf)
+        # print ("Write")
+        # print (buf)
         # h.write(buf)
-        #buf = h.read(65)
-        #print ("Read")
-        #print (buf)
+        # buf = h.read(65)
+        # print ("Read")
+        # print (buf)
 
 #######################################################################
 # GPIO Init
@@ -151,7 +151,7 @@ class PyMCP2221A:
         buf[9 + 1] = self.GPIO_1_BIT << 4 | self.GPIO_1_DIR << 3 | self.GPIO_1_MODE  # GP0 settings
         buf[10 + 1] = self.GPIO_2_BIT << 4 | self.GPIO_2_DIR << 3 | self.GPIO_2_MODE  # GP0 settings
         buf[11 + 1] = self.GPIO_3_BIT << 4 | self.GPIO_3_DIR << 3 | self.GPIO_3_MODE  # GP0 settings
-        #print (buf)
+        # print (buf)
         # for(i in range(64)):
         #    buf[i] = rbuf[i] | buf[i]
         self.mcp2221a.write(buf)
@@ -497,7 +497,7 @@ class PyMCP2221A:
         # The I2C/SMBus system clock divider that will be used to establish the communication speed
         buf[3 + 1] = 0xFF & (addrs << 1)
         for i in range(len(data)):
-            #print ("{:d}: 0x{:02x}".format(i,data[i]))
+            # print ("{:d}: 0x{:02x}".format(i,data[i]))
             buf[4 + 1 + i] = data[i]  # The I2C/SMBus system clock divider that will be used to establish the communication speed
         self.mcp2221a.write(buf)
         rbuf = self.mcp2221a.read(65)
@@ -506,18 +506,66 @@ class PyMCP2221A:
         # time.sleep(0.005)
         time.sleep(0.008)
 
+    def I2C_Write_Repeated(self, addrs, data):
+        """ Writes a block of data with Repeated Start and Stop conditions on bus
+        :param int addrs: 8-bit I2C slave address
+        :param list data: list of int
+
+        Referring to MCP2221A Datasheet(Rev.B 2017), section 3.1.6
+        """
+        buf = [0x00, 0x92]
+        self._i2c_write(addrs, data, buf)
+
+    def I2C_Write_No_Stop(self, addrs, data):
+        """ Writes a block of data with Start condition on bus
+        :param int addrs: 8-bit I2C slave address
+        :param list data: list of int
+
+        Referring to MCP2221A Datasheet(Rev.B 2017), section 3.1.7
+        """
+        buf = [0x00, 0x94]
+        self._i2c_write(addrs, data, buf)
+
+    def _i2c_write(self, addrs, data, buf):
+        buf = buf + [0 for i in range(65 - len(buf))]
+        buf[1 + 1] = (len(data) & 0x00FF)  # Cancel current I2C/SMBus transfer (sub-command)
+        buf[2 + 1] = (len(data) & 0xFF00) >> 8  # Set I2C/SMBus communication speed (sub-command)
+        # The I2C/SMBus system clock divider that will be used to establish the communication speed
+        buf[3 + 1] = 0xFF & (addrs << 1)
+        for i in range(len(data)):
+            # print ("{:d}: 0x{:02x}".format(i,data[i]))
+            buf[4 + 1 + i] = data[i]  # The I2C/SMBus system clock divider that will be used to establish the communication speed
+        self.mcp2221a.write(buf)
+        rbuf = self.mcp2221a.read(65)
+        time.sleep(0.008)
+
+
 #######################################################################
 # I2C Read
 #######################################################################
     def I2C_Read(self, addrs, size):
         buf = [0x00, 0x91]
+        self._i2c_read(addrs, size, buf)
+
+    def I2C_Read_Repeated(self, addrs, size):
+        """ Reads a block of data with Repeated Start and Stop conditions on bus
+        :param int addrs: 8-bit I2C slave address
+        :param int size: size of read out in bytes
+
+        Referring to MCP2221A Datasheet(Rev.B 2017), section 3.1.9
+        """
+        buf = [0x00, 0x93]
+        return self._i2c_read(addrs, size, buf)
+
+    def _i2c_read(self, addrs, size, buf):
         buf = buf + [0 for i in range(65 - len(buf))]
+
         buf[1 + 1] = (size & 0x00FF)  # Read LEN
         buf[2 + 1] = (size & 0xFF00) >> 8  # Read LEN
         buf[3 + 1] = 0xFF & (addrs << 1)  # addrs
         self.mcp2221a.write(buf)
         rbuf = self.mcp2221a.read(65)
-        if(rbuf[1] != 0x00):
+        if (rbuf[1] != 0x00):
             # print("[0x91:0x{:02x},0x{:02x},0x{:02x}]".format(rbuf[1],rbuf[2],rbuf[3]))
             self.I2C_Cancel()
             self.I2C_Init()
@@ -530,27 +578,27 @@ class PyMCP2221A:
         buf[3 + 1] = 0x00
         self.mcp2221a.write(buf)
         rbuf = self.mcp2221a.read(65)
-        if(rbuf[1] != 0x00):
+        if (rbuf[1] != 0x00):
             # print("[0x40:0x{:02x},0x{:02x},0x{:02x}]".format(rbuf[1],rbuf[2],rbuf[3]))
             self.I2C_Cancel()
-
             self.I2C_Init()
             return -1
-        if(rbuf[2] == 0x00 and rbuf[3] == 0x00):
+        if (rbuf[2] == 0x00 and rbuf[3] == 0x00):
             self.I2C_Cancel()
             self.I2C_Init()
             return rbuf[4]
-        if(rbuf[2] == 0x55 and rbuf[3] == size):
+        if (rbuf[2] == 0x55 and rbuf[3] == size):
             rdata = [0] * size
             for i in range(size):
                 rdata[i] = rbuf[4 + i]
             return rdata
 
+
 #######################################################################
 # reset
 #######################################################################
     def Reset(self):
-        print ("Rseat")
+        print ("Reset")
         buf = [0x00, 0x70, 0xAB, 0xCD, 0xEF]
         buf = buf + [0 for i in range(65 - len(buf))]
         self.mcp2221a.write(buf)
