@@ -20,7 +20,7 @@ for i in range(0x00,0x7F) :
         print("   {:02X}".format(i-1))
 
     if(mcp2221.I2C_Read(i,1) != -1):
-        print('  {:02x}'.format(i), end='')
+        print('  {:02X}'.format(i), end='')
     else:
         print('  --', end='')
     #time.sleep(0.1)
