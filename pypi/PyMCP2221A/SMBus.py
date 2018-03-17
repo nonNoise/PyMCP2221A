@@ -31,5 +31,5 @@ class SMBus :
         self.mcp2221.I2C_Write_No_Stop(addrs,[cmd])
         return self.mcp2221.I2C_Read_Repeated(addrs,size)
     def write_i2c_block_data(self, addrs,cmd,vals):
-        self.mcp2221.I2C_Write(addrs,[cmd,va])
+        self.mcp2221.I2C_Write(addrs,[cmd,vals])
         
