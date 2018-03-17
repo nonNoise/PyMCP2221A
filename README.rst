@@ -32,9 +32,17 @@ PyMCP2221A Install
 Sample
 ----------------------------------------------------
 
-import PyMCP2221A
+from PyMCP2221A import PyMCP2221A
 
 mcp2221 = PyMCP2221A.PyMCP2221A()
+
+and More. SMBus (system management bus) compatible function 
+----------------------------------------------------
+
+from PyMCP2221A import SMBus 
+
+bus = SMBus.SMBus()
+
 
 Setup
 ----------------------------------------------------
@@ -68,7 +76,10 @@ Example
 
     https://github.com/nonNoise/PyMCP2221A/blob/master/example/MCP2221_EEPROM_WriteReadTest.py
 
+
+
+
 License
 ----------------------------------------------------
 
-    The MIT License (MIT) Copyright (c) 2017 Yuta KItagami (kitagami@artifactnoise.com,@nonnoise)
+    The MIT License (MIT) Copyright (c) 2017 Yuta Kitagami (kitagami@artifactnoise.com,@nonnoise)

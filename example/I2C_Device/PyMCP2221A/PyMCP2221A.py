@@ -525,6 +525,7 @@ class PyMCP2221A:
         """
         buf = [0x00, 0x94]
         self._i2c_write(addrs, data, buf)
+
     def _i2c_write(self, addrs, data, buf):
         buf = buf + [0 for i in range(65 - len(buf))]
         buf[1 + 1] = (len(data) & 0x00FF)  # Cancel current I2C/SMBus transfer (sub-command)
@@ -562,7 +563,6 @@ class PyMCP2221A:
         buf = [0x00, 0x93]
         return self._i2c_read(addrs, size, buf)
 
-    
     def _i2c_read(self, addrs, size, buf):
         buf = buf + [0 for i in range(65 - len(buf))]
 
@@ -609,50 +609,3 @@ class PyMCP2221A:
         buf = buf + [0 for i in range(65 - len(buf))]
         self.mcp2221a.write(buf)
         time.sleep(1)
-
-
-
-#######################################################################
-# Option function
-#######################################################################
-
-    def I2C_ReadReg(self, addrs,reg):
-        """ 1 byte Read to the register.
-        :param int addrs: 8-bit I2C slave address
-        :param int reg: 8-bit register addr
-        Option function.
-        """
-        buf = [0x00, 0x90]
-        self.I2C_Write_No_Stop(addrs,[reg])
-        buf = [0x00, 0x93]
-        return self._i2c_read(addrs,1, buf)[0]
-    def I2C_ReadWordReg(self, addrs,reg,size):
-        """ 1 byte Read to the register.
-        :param int addrs: 8-bit I2C slave address
-        :param int reg: 8-bit register addr
-        :param int size: size of read out in bytes
-        Option function.
-        """
-        buf = [0x00, 0x90]
-        self.I2C_Write_No_Stop(addrs,[reg])
-        buf = [0x00, 0x93]
-        return self._i2c_read(addrs,size, buf)  
-    def I2C_WriteReg(self, addrs, reg ,data):
-        """ Write to the resist.
-        :param int addrs: 8-bit I2C slave address
-        :param int reg: 8-bit register addr
-        :param int data: 8-bit data
-        Option function.
-        """
-        buf = [0x00, 0x90]
-        self._i2c_write(addrs,[reg,data],buf)
-
-    def I2C_WriteWordReg(self, addrs, reg ,data):
-        """ Write to the resist.
-        :param int addrs: 8-bit I2C slave address
-        :param int reg: 8-bit register addr
-        :param list data: list of int
-        Option function.
-        """
-        buf = [0x00, 0x90]
-        self._i2c_write(addrs,[reg]+data,buf)

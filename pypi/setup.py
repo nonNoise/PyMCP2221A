@@ -9,15 +9,15 @@ f.close()
 
 setup(
     name = 'PyMCP2221A',
-    version = '1.2.0',
+    version = '1.3.0',
     url="https://github.com/nonNoise/PyMCP2221A",
-    keywords = ('Hardware,USB,HID,MCP2221,I2C,GPIO,I2C'),
-    description = 'This is a Microchip MCP2221(A) HID Library in python(3).',
+    keywords = ('Hardware,USB,HID,MCP2221,I2C,GPIO,I2C,SMBus'),
+    description = 'This is a Microchip MCP2221(A) HID Library by python3.',
     license = 'MIT License',
     install_requires = ["hidapi"],
     long_description=long_description,
     packages=['PyMCP2221A'],
-    author = ' Yuta KItagami',
+    author = ' Yuta Kitagami',
     author_email = 'kitagami@artifactnoise.com',
     platforms = ['Linux','Windows','Mac'],
 )
