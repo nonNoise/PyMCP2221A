@@ -139,15 +139,15 @@ class PyMCP2221A:
 # GPIO Write command
 #######################################################################
     def GPIO_Write(self):
-        buf = [0x00, 0x61]
-        buf = buf + [0 for i in range(65 - len(buf))]
-        self.mcp2221a.write(buf)
-        rbuf = self.mcp2221a.read(65)
+        #buf = [0x00, 0x61]
+        #buf = buf + [0 for i in range(65 - len(buf))]
+        #self.mcp2221a.write(buf)
+        #rbuf = self.mcp2221a.read(65)
 
         buf = [0x00, 0x60]
         buf = buf + [0 for i in range(65 - len(buf))]
-        buf[2 + 1] = rbuf[5]  # Clock Output Divider value
-        buf[3 + 1] = rbuf[6]  # DAC Voltage Reference
+        #buf[2 + 1] = rbuf[5]  # Clock Output Divider value
+        #buf[3 + 1] = rbuf[6]  # DAC Voltage Reference
         # buf[4+1] = 0x00     #   Set DAC output value
         # buf[5+1] = 0x00     #   ADC Voltage Reference
         # buf[6+1] = 0x00     #   Setup the interrupt detection mechanism and clear the detection flag
@@ -162,7 +162,7 @@ class PyMCP2221A:
         # for(i in range(64)):
         #    buf[i] = rbuf[i] | buf[i]
         self.mcp2221a.write(buf)
-        self.mcp2221a.read(65)
+        self.mcp2221a.read(1)
 
 #######################################################################
 # Read GPIO Data command
