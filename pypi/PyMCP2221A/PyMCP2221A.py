@@ -3,8 +3,7 @@
 #    Copyright (c) 2017 Yuta KItagami                       #
 #############################################################
 
-from hidapi import hid
-#import hid
+import hid
 # pip install hidapi
 # https://github.com/trezor/cython-hidapi
 import time
