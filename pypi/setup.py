@@ -14,7 +14,6 @@ setup(
     keywords = ('Hardware,USB,HID,MCP2221,I2C,GPIO,I2C,SMBus'),
     description = 'This is a Microchip MCP2221(A) HID Library by python3.',
     license = 'MIT License',
-    install_requires = ["hidapi"],
     long_description=long_description,
     packages=['PyMCP2221A'],
     author = ' Yuta Kitagami',
