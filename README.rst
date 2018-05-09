@@ -11,6 +11,10 @@ MCP2221 & MCP2221A work in Python.
 
 |
 
+日本語はこちら
+
+https://github.com/nonNoise/PyMCP2221A/blob/master/README_JP.rst
+
 Install
 ----------------------------------------------------
 
