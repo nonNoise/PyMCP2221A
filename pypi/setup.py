@@ -15,7 +15,7 @@ setup(
     description = 'This is a Microchip MCP2221(A) HID Library by python3.',
     license = 'MIT License',
     long_description=long_description,
-    packages=['PyMCP2221A'],
+    packages=['PyMCP2221A','PyMCP2221A/hidapi','PyMCP2221A/hidapi/lib_linux_armv7l_2_7/'],
     author = ' Yuta Kitagami',
     author_email = 'kitagami@artifactnoise.com',
     platforms = ['Linux','Windows','Mac'],
