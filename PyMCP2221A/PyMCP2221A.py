@@ -3,7 +3,13 @@
 #    Copyright (c) 2017 Yuta KItagami                       #
 #############################################################
 
-import hid
+import platform
+plat = platform.platform()
+if  ("armv7l" or "armv6l")  in plat :
+    from raspberrypi import hid
+else:
+    import hid
+#import hid
 # pip install hidapi
 # https://github.com/trezor/cython-hidapi
 import time
