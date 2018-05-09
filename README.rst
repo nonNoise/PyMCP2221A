@@ -11,23 +11,24 @@ MCP2221 & MCP2221A work in Python.
 
 |
 
-これはMCP2221(A)のHIDを使ったPythonライブラリーです。
-
-MCP2221 と MCP2221A で動作します。
-
-
 Install
 ----------------------------------------------------
-
-This library uses hitapi.
-
-    pip install hidapi
-
-    https://github.com/trezor/cython-hidapi
 
 PyMCP2221A Install
 
     pip install PyMCP2221A
+
+or
+
+    git clone https://github.com/nonNoise/PyMCP2221A.git
+
+    cd pypi
+
+    sudo python setup.py build
+
+    sudo python setup.py install
+
+
 
 Sample
 ----------------------------------------------------
