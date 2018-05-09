@@ -3,12 +3,7 @@
 #    Copyright (c) 2017 Yuta KItagami                       #
 #############################################################
 
-import platform
-plat = platform.platform()
-if  ("armv7l" or "armv6l")  in plat :
-    from binary import hid
-else:
-    import hid
+from hidapi import hid
 #import hid
 # pip install hidapi
 # https://github.com/trezor/cython-hidapi
