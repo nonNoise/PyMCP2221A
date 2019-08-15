@@ -3,7 +3,7 @@
 #    Copyright (c) 2017 Yuta KItagami                       #
 #############################################################
 
-from hidapi import hid
+import hid
 #import hid
 # pip install hidapi
 # https://github.com/trezor/cython-hidapi
@@ -13,7 +13,7 @@ import time
 class PyMCP2221A:
     def __init__(self,VID = 0x04D8,PID = 0x00DD,devnum = 0):
         self.mcp2221a = hid.device()
-        self.mcp2221a.open_path(hid.enumerate(0x04D8, 0x00DD)[devnum]["path"])
+        self.mcp2221a.open_path(hid.enumerate(VID, PID)[devnum]["path"])
         self.CLKDUTY_0 = 0x00
         self.CLKDUTY_25 = 0x08
         self.CLKDUTY_50 = 0x10
