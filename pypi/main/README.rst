@@ -23,6 +23,7 @@ PyMCP2221A Install
 
     pip install PyMCP2221A
 
+
 Sample
 ----------------------------------------------------
 
@@ -31,7 +32,6 @@ from PyMCP2221A import PyMCP2221A
 mcp2221 = PyMCP2221A.PyMCP2221A()
 
 and More. SMBus (system management bus) compatible function 
-----------------------------------------------------
 
 from PyMCP2221A import SMBus 
 
@@ -42,6 +42,7 @@ Setup
 ----------------------------------------------------
 
 .. image:: ./img/mcp2221.PNG
+
 
 Example
 ----------------------------------------------------

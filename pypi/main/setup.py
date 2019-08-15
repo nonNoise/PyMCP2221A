@@ -9,7 +9,7 @@ f.close()
 
 setup(
     name = 'PyMCP2221A',
-    version = '1.3.1',
+    version = '1.4.0',
     url="https://github.com/nonNoise/PyMCP2221A",
     keywords = ('Hardware,USB,HID,MCP2221,I2C,GPIO,I2C,SMBus'),
     description = 'This is a Microchip MCP2221(A) HID Library by python3.',
