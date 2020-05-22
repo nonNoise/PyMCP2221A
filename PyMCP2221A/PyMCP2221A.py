@@ -137,33 +137,29 @@ class PyMCP2221A:
 
 
 #######################################################################
-# GPIO Write command
+# GPIO Set Direction and Set Value commands
 #######################################################################
-    def GPIO_Write(self):
-        buf = [0x00, 0x61]
+    def GPIO_SetDirection(self, pin, direction):
+        buf = [0x00, 0x50]
         buf = buf + [0 for i in range(65 - len(buf))]
+        offset = (pin + 1) * 4
+        buf[offset + 1] = 0x01  # set pin direction
+        buf[offset + 1 + 1] = direction  # to this
         self.mcp2221a.write(buf)
         rbuf = self.mcp2221a.read(65)
+        if rbuf[1] != 0x00:
+            raise RuntimeError("GPIO_SetDirection Failed")
 
-        buf = [0x00, 0x60]
+    def GPIO_SetValue(self, pin, value):
+        buf = [0x00, 0x50]
         buf = buf + [0 for i in range(65 - len(buf))]
-        buf[2 + 1] = rbuf[5]  # Clock Output Divider value
-        buf[3 + 1] = rbuf[6]  # DAC Voltage Reference
-        # buf[4+1] = 0x00     #   Set DAC output value
-        # buf[5+1] = 0x00     #   ADC Voltage Reference
-        # buf[6+1] = 0x00     #   Setup the interrupt detection mechanism and clear the detection flag
-        buf[7 + 1] = 0x80  # Alter GPIO configuration: alters the current GP designation
-        #   datasheet says this should be 1, but should actually be 0x80
-
-        buf[8 + 1] = self.GPIO_0_BIT << 4 | self.GPIO_0_DIR << 3 | self.GPIO_0_MODE  # GP0 settings
-        buf[9 + 1] = self.GPIO_1_BIT << 4 | self.GPIO_1_DIR << 3 | self.GPIO_1_MODE  # GP0 settings
-        buf[10 + 1] = self.GPIO_2_BIT << 4 | self.GPIO_2_DIR << 3 | self.GPIO_2_MODE  # GP0 settings
-        buf[11 + 1] = self.GPIO_3_BIT << 4 | self.GPIO_3_DIR << 3 | self.GPIO_3_MODE  # GP0 settings
-        # print (buf)
-        # for(i in range(64)):
-        #    buf[i] = rbuf[i] | buf[i]
+        offset = ((pin + 1) * 4) - 1
+        buf[offset - 1 + 1] = 0x01  # set pin value
+        buf[offset + 1] = value  # to this
         self.mcp2221a.write(buf)
-        self.mcp2221a.read(65)
+        rbuf = self.mcp2221a.read(65)
+        if rbuf[1] != 0x00:
+            raise RuntimeError("GPIO_SetValue Failed")
 
 #######################################################################
 # Read GPIO Data command
@@ -181,6 +177,15 @@ class PyMCP2221A:
         self.GPIO_2_DIR = buf[7]
         self.GPIO_3_INPUT = buf[8]
         self.GPIO_3_DIR = buf[9]
+        return buf
+    
+    # Return the GPIO value as an integer instead of tuple
+    def GPIO_GetValue(self, pin):
+        rbuf = self.GPIO_Read()
+        offset = (pin + 1) * 2
+        if rbuf[offset] == 0xEE:
+            raise RuntimeError("GPIO_GetValue Failed, pin is not set for GPIO operation")
+        return rbuf[offset]
 
 #######################################################################
 # GPIO Outpu/Input Data
@@ -189,15 +194,15 @@ class PyMCP2221A:
         self.GPIO_0_BIT = bit  # 1:Hi 0:LOW
         self.GPIO_0_DIR = 0  # 0:OutPut 1:Input
         self.GPIO_0_MODE = 0  # 0:GPIO
-        self.GPIO_Write()
+        self.GPIO_SetValue(0, self.GPIO_0_BIT)
 
     def GPIO_0_InputMode(self):
         self.GPIO_0_DIR = 1  # 0:OutPut 1:Input
-        self.GPIO_Write()
+        self.GPIO_SetDirection(0, self.GPIO_0_DIR)
 
     def GPIO_0_OutputMode(self):
         self.GPIO_0_DIR = 0  # 0:OutPut 1:Input
-        self.GPIO_Write()
+        self.GPIO_SetDirection(0, self.GPIO_0_DIR)
 
     def GPIO_0_Input(self):
         self.GPIO_Read()
@@ -207,15 +212,15 @@ class PyMCP2221A:
         self.GPIO_1_BIT = bit  # 1:Hi 0:LOW
         self.GPIO_1_DIR = 0  # 0:OutPut 1:Input
         self.GPIO_1_MODE = 0  # 0:GPIO
-        self.GPIO_Write()
+        self.GPIO_SetValue(1, self.GPIO_1_BIT)
 
     def GPIO_1_InputMode(self):
         self.GPIO_1_DIR = 1  # 0:OutPut 1:Input
-        self.GPIO_Write()
+        self.GPIO_SetDirection(1, self.GPIO_1_DIR)
 
     def GPIO_1_OutputMode(self):
         self.GPIO_1_DIR = 0  # 0:OutPut 1:Input
-        self.GPIO_Write()
+        self.GPIO_SetDirection(1, self.GPIO_1_DIR)
 
     def GPIO_1_Input(self):
         self.GPIO_Read()
@@ -225,15 +230,15 @@ class PyMCP2221A:
         self.GPIO_2_BIT = bit  # 1:Hi 0:LOW
         self.GPIO_2_DIR = 0  # 0:OutPut 1:Input
         self.GPIO_2_MODE = 0  # 0:GPIO
-        self.GPIO_Write()
+        self.GPIO_SetValue(1, self.GPIO_1_BIT)
 
     def GPIO_2_InputMode(self):
         self.GPIO_2_DIR = 1  # 0:OutPut 1:Input
-        self.GPIO_Write()
+        self.GPIO_SetDirection(2, self.GPIO_2_DIR)
 
     def GPIO_2_OutputMode(self):
         self.GPIO_2_DIR = 0  # 0:OutPut 1:Input
-        self.GPIO_Write()
+        self.GPIO_SetDirection(2, self.GPIO_2_DIR)
 
     def GPIO_2_Input(self):
         self.GPIO_Read()
@@ -243,15 +248,15 @@ class PyMCP2221A:
         self.GPIO_3_BIT = bit  # 1:Hi 0:LOW
         self.GPIO_3_DIR = 0  # 0:OutPut 1:Input
         self.GPIO_3_MODE = 0  # 0:GPIO
-        self.GPIO_Write()
+        self.GPIO_SetValue(3, self.GPIO_3_BIT)
 
     def GPIO_3_InputMode(self):
         self.GPIO_3_DIR = 1  # 0:OutPut 1:Input
-        self.GPIO_Write()
+        self.GPIO_SetDirection(3, self.GPIO_3_DIR)
 
     def GPIO_3_OutputMode(self):
         self.GPIO_3_DIR = 0  # 0:OutPut 1:Input
-        self.GPIO_Write()
+        self.GPIO_SetDirection(3, self.GPIO_3_DIR)
 
     def GPIO_3_Input(self):
         self.GPIO_Read()
@@ -463,13 +468,9 @@ class PyMCP2221A:
         rbuf = self.mcp2221a.read(65)
         # print("Init")
         if(rbuf[22] == 0):
-            print("SCL is low.")
-            exit()
-            return -1
+            raise RuntimeError("SCL is low.")
         if(rbuf[23] == 0):
-            print("SDA is low.")
-            exit()
-            return -1
+            raise RuntimeError("SDA is low.")
 
         # time.sleep(0.001)
 
@@ -573,11 +574,11 @@ class PyMCP2221A:
         self.mcp2221a.write(buf)
         rbuf = self.mcp2221a.read(65)
         if (rbuf[1] != 0x00):
-            # print("[0x91:0x{:02x},0x{:02x},0x{:02x}]".format(rbuf[1],rbuf[2],rbuf[3]))
+            print("[0x91:0x{:02x},0x{:02x},0x{:02x}]".format(rbuf[1],rbuf[2],rbuf[3]))
             self.I2C_Cancel()
             self.I2C_Init()
             return -1
-        # time.sleep(0.1)
+        time.sleep(0.05)
         buf = [0x00, 0x40]
         buf = buf + [0 for i in range(65 - len(buf))]
         buf[1 + 1] = 0x00
@@ -586,7 +587,7 @@ class PyMCP2221A:
         self.mcp2221a.write(buf)
         rbuf = self.mcp2221a.read(65)
         if (rbuf[1] != 0x00):
-            # print("[0x40:0x{:02x},0x{:02x},0x{:02x}]".format(rbuf[1],rbuf[2],rbuf[3]))
+            print("[0x40:0x{:02x},0x{:02x},0x{:02x}]".format(rbuf[1],rbuf[2],rbuf[3]))
             self.I2C_Cancel()
             self.I2C_Init()
             return -1
