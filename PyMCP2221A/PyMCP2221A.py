@@ -1,9 +1,3 @@
-# Stolen from https://github.com/nonNoise/PyMCP2221A/blob/master/PyMCP2221A/PyMCP2221A.py
-# MODIFIED BY MONOGRAM:
-# Added Exception in I2C_Init instead of SystemExit
-# Restored time.sleep() in _i2c_read
-# Changed GPIO implementation in reference to https://lkml.org/lkml/2020/4/14/1004
-
 #############################################################
 #    MIT License                                            #
 #    Copyright (c) 2017 Yuta KItagami                       #
@@ -581,7 +575,7 @@ class PyMCP2221A:
         self.mcp2221a.write(buf)
         rbuf = self.mcp2221a.read(65)
         if (rbuf[1] != 0x00):
-            print("[0x91:0x{:02x},0x{:02x},0x{:02x}]".format(rbuf[1],rbuf[2],rbuf[3]))
+            # print("[0x91:0x{:02x},0x{:02x},0x{:02x}]".format(rbuf[1],rbuf[2],rbuf[3]))
             self.I2C_Cancel()
             self.I2C_Init()
             raise RuntimeError("I2C Read Data Failed: Code " + rbuf[1])
@@ -594,7 +588,7 @@ class PyMCP2221A:
         self.mcp2221a.write(buf)
         rbuf = self.mcp2221a.read(65)
         if (rbuf[1] != 0x00):
-            print("[0x40:0x{:02x},0x{:02x},0x{:02x}]".format(rbuf[1],rbuf[2],rbuf[3]))
+            # print("[0x40:0x{:02x},0x{:02x},0x{:02x}]".format(rbuf[1],rbuf[2],rbuf[3]))
             self.I2C_Cancel()
             self.I2C_Init()
             print("You can try increasing environment variable MCP2221_I2C_SLEEP")
