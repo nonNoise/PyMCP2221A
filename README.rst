@@ -81,6 +81,12 @@ Example
 
     https://github.com/nonNoise/PyMCP2221A/blob/master/example/MCP2221_EEPROM_WriteReadTest.py
 
+    Note you can change the system enviornment variable for I2C read delay if 
+    you are running into I2C problems.
+    
+    import os
+    os.environ["MCP2221_I2C_SLEEP"] = "0.05"
+
 
 
 
