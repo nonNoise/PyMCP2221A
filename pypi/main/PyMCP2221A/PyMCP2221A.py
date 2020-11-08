@@ -499,7 +499,7 @@ class PyMCP2221A:
 #######################################################################
     def I2C_Write(self, addrs, data):
         """ Writes a block of data with Start and Stop c condition on bus
-        :param int addrs: 8-bit I2C slave address
+        :param int addrs: 7-bit I2C slave address
         :param list data: list of int
 
         Referring to MCP2221A Datasheet(Rev.B 2017), section 3.1.5
@@ -509,7 +509,7 @@ class PyMCP2221A:
         
     def I2C_Write_Repeated(self, addrs, data):
         """ Writes a block of data with Repeated Start and Stop conditions on bus
-        :param int addrs: 8-bit I2C slave address
+        :param int addrs: 7-bit I2C slave address
         :param list data: list of int
 
         Referring to MCP2221A Datasheet(Rev.B 2017), section 3.1.6
@@ -519,7 +519,7 @@ class PyMCP2221A:
 
     def I2C_Write_No_Stop(self, addrs, data):
         """ Writes a block of data with Start condition on bus
-        :param int addrs: 8-bit I2C slave address
+        :param int addrs: 7-bit I2C slave address
         :param list data: list of int
 
         Referring to MCP2221A Datasheet(Rev.B 2017), section 3.1.7
@@ -546,7 +546,7 @@ class PyMCP2221A:
 #######################################################################
     def I2C_Read(self, addrs, size):
         """ Reads a block of data with Start and Stop conditions on bus
-        :param int addrs: 8-bit I2C slave address
+        :param int addrs: 7-bit I2C slave address
         :param int size: size of read out in bytes
 
         Referring to MCP2221A Datasheet(Rev.B 2017), section 3.1.8
@@ -556,7 +556,7 @@ class PyMCP2221A:
 
     def I2C_Read_Repeated(self, addrs, size):
         """ Reads a block of data with Repeated Start and Stop conditions on bus
-        :param int addrs: 8-bit I2C slave address
+        :param int addrs: 7-bit I2C slave address
         :param int size: size of read out in bytes
 
         Referring to MCP2221A Datasheet(Rev.B 2017), section 3.1.9
