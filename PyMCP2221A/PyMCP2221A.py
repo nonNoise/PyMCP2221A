@@ -446,7 +446,7 @@ class PyMCP2221A:
         buf = buf + [0 for i in range(65 - len(buf))]
         buf[2 + 1] = rbuf[5]  # Clock Output Divider value
         buf[3 + 1] = 0x00  # DAC Voltage Reference
-        buf[4 + 1] = 0x80 | (0x0F & value)  # Set DAC output value
+        buf[4 + 1] = 0x80 | (0x1F & value)  # Set DAC output value
         buf[5 + 1] = rbuf[7]  # ADC Voltage Reference
         buf[6 + 1] = 0x00  # Setup the interrupt detection mechanism and clear the detection flag
         buf[7 + 1] = 0xFF  # Alter GPIO configuration: alters the current GP designation
